@@ -1,5 +1,4 @@
 import puppeteer from "puppeteer";
-import chrome from "chrome-cookies-secure";
 import dotenv from "dotenv";
 
 dotenv.config();
@@ -10,18 +9,10 @@ const browser = await puppeteer.launch({
   headless: false,
   timeout: 200000,
 });
-
 const context = browser.defaultBrowserContext();
 await context.overridePermissions(oksLectureUrl, ["microphone"]);
 
-// const cookies = await chrome.getCookiesPromised(
-//   oksLectureUrl,
-//   "puppeteer",
-//   "Default"
-// );
-
 const page = await browser.newPage();
-// await page.setCookie(...cookies);
 await page.goto(oksLectureUrl);
 await page.setViewport({ height: 700, width: 1200, deviceScaleFactor: 0.1 });
 await delay(10000);
