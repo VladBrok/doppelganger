@@ -3,11 +3,17 @@ import dotenv from "dotenv";
 
 dotenv.config();
 const oksLectureUrl =
-  "https://calls.mail.ru/room/0d9a6beb-2627-4a3f-a80b-432b1688d845";
+  "https://calls.mail.ru/room/2cd1ffff-a5a9-410c-a9cd-8851edf121ea";
+// "https://calls.mail.ru/room/0d9a6beb-2627-4a3f-a80b-432b1688d845";
 
 const browser = await puppeteer.launch({
-  headless: false,
+  headless: true,
   timeout: 200000,
+  args: [
+    "--use-fake-ui-for-media-stream",
+    "--use-fake-device-for-media-stream",
+  ],
+  ignoreDefaultArgs: ["--mute-audio"],
 });
 const context = browser.defaultBrowserContext();
 await context.overridePermissions(oksLectureUrl, ["microphone"]);
@@ -40,8 +46,7 @@ await submitButton.click();
 page.once("dialog", (reloadConfirmation) => {
   reloadConfirmation.accept();
 });
-await page.bringToFront();
-await delay(25000);
+await delay(30000);
 
 const microphoneCheckbox = await page.waitForSelector(".box-0-2-93");
 await microphoneCheckbox.click();
