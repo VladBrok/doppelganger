@@ -1,9 +1,10 @@
 import puppeteer from "puppeteer";
 import dotenv from "dotenv";
 import { delay } from "./lib/delay.js";
+import { waitForAnySelector } from "./lib/waitForAnySelector.js";
 
 dotenv.config();
-const oksLectureUrl =
+const targetUrl =
   // "https://calls.mail.ru/room/0d9a6beb-2627-4a3f-a80b-432b1688d845";
   "https://calls.mail.ru/room/2cd1ffff-a5a9-410c-a9cd-8851edf121ea";
 // "https://calls.mail.ru/room/0d9a6beb-2627-4a3f-a80b-432b1688d845";
@@ -18,10 +19,10 @@ const browser = await puppeteer.launch({
   ignoreDefaultArgs: ["--mute-audio"],
 });
 const context = browser.defaultBrowserContext();
-await context.overridePermissions(oksLectureUrl, ["microphone"]);
+await context.overridePermissions(targetUrl, ["microphone"]);
 
 const page = await browser.newPage();
-await page.goto(oksLectureUrl);
+await page.goto(targetUrl);
 await page.setViewport({ height: 700, width: 1200, deviceScaleFactor: 0.1 });
 await delay(10000);
 
@@ -48,7 +49,7 @@ await submitButton.click();
 page.once("dialog", (reloadConfirmation) => {
   reloadConfirmation.accept();
 });
-await delay(30000);
+await delay(60000);
 
 const microphoneCheckbox = await page.waitForSelector(".box-0-2-93");
 await microphoneCheckbox.click();
@@ -58,9 +59,10 @@ const startWithoutCamButton = await page.waitForSelector(
 await startWithoutCamButton.click();
 await delay(10000);
 
-const openChatButton = await page.waitForSelector(
+const openChatButton = await waitForAnySelector(
+  page,
+  ".base-0-2-144.base-d5-0-2-175",
   ".base-0-2-563.base-d5-0-2-594"
-  // ".base-0-2-144.base-d5-0-2-175"
 );
 await openChatButton.click();
 await delay(25000);
