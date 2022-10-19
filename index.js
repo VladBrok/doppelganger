@@ -15,7 +15,7 @@ await enterMeeting({ page, delays });
 await openChat({ page, delays });
 await writeMessage({ page, message: config.chatMessage });
 
-await closeBroswer({ browser, delays });
+await closeBrowser({ browser, delays });
 
 async function launchBrowser({ targetUrl, headless, launchTimeout }) {
   const browser = await puppeteer.launch({
@@ -102,7 +102,7 @@ async function writeMessage({ page, message }) {
   await page.keyboard.press("Enter");
 }
 
-async function closeBroswer({ browser, delays }) {
+async function closeBrowser({ browser, delays }) {
   await delay(delays.beforeClose);
   await browser.close();
 }
