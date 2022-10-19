@@ -1,6 +1,6 @@
 import puppeteer from "puppeteer";
 import dotenv from "dotenv";
-import { delay } from "./lib/delay";
+import { delay } from "./lib/delay.js";
 
 dotenv.config();
 const oksLectureUrl =
