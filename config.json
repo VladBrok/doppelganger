@@ -7,7 +7,7 @@
   "delays": {
     "pageLoad": 10000,
     "authFrameLoad": 10000,
-    "afterAuth": 60000,
+    "afterLogIn": 60000,
     "afterStart": 10000,
     "chatLoad": 25000,
     "beforeClose": 30000
