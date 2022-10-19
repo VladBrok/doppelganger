@@ -2,16 +2,19 @@ import puppeteer from "puppeteer";
 import dotenv from "dotenv";
 import { delay } from "./lib/delay.js";
 import { waitForAnySelector } from "./lib/waitForAnySelector.js";
+import config from "./config.json" assert { type: "json" };
 
 dotenv.config();
-const targetUrl =
-  // "https://calls.mail.ru/room/0d9a6beb-2627-4a3f-a80b-432b1688d845";
-  "https://calls.mail.ru/room/2cd1ffff-a5a9-410c-a9cd-8851edf121ea";
-// "https://calls.mail.ru/room/0d9a6beb-2627-4a3f-a80b-432b1688d845";
+const delays = config.delays;
+const targetUrl = config.targetUrl;
+
+// "https://calls.mail.ru/room/0d9a6beb-2627-4a3f-a80b-432b1688d845"; // ?
+// "https://calls.mail.ru/room/2cd1ffff-a5a9-410c-a9cd-8851edf121ea"; // test
+// "https://calls.mail.ru/room/0d9a6beb-2627-4a3f-a80b-432b1688d845"; // oks
 
 const browser = await puppeteer.launch({
-  headless: true,
-  timeout: 200000,
+  headless: config.headless,
+  timeout: config.launchTimeout,
   args: [
     "--use-fake-ui-for-media-stream",
     "--use-fake-device-for-media-stream",
@@ -23,12 +26,12 @@ await context.overridePermissions(targetUrl, ["microphone"]);
 
 const page = await browser.newPage();
 await page.goto(targetUrl);
-await page.setViewport({ height: 700, width: 1200, deviceScaleFactor: 0.1 });
-await delay(10000);
+await page.setViewport(config.pageViewport);
+await delay(delays.pageLoad);
 
 const loginButton = await page.waitForSelector("#PH_authLink");
 await loginButton.click();
-await delay(10000);
+await delay(delays.authFrameLoad);
 const authFrame = page
   .frames()
   .find((f) => f.url().includes("account.mail.ru/login"));
@@ -49,7 +52,7 @@ await submitButton.click();
 page.once("dialog", (reloadConfirmation) => {
   reloadConfirmation.accept();
 });
-await delay(60000);
+await delay(delays.afterAuth);
 
 const microphoneCheckbox = await page.waitForSelector(".box-0-2-93");
 await microphoneCheckbox.click();
@@ -57,7 +60,7 @@ const startWithoutCamButton = await page.waitForSelector(
   ".base-0-2-100.base-d7-0-2-142"
 );
 await startWithoutCamButton.click();
-await delay(10000);
+await delay(delays.afterStart);
 
 const openChatButton = await waitForAnySelector(
   page,
@@ -65,15 +68,16 @@ const openChatButton = await waitForAnySelector(
   ".base-0-2-563.base-d5-0-2-594"
 );
 await openChatButton.click();
-await delay(25000);
+await delay(delays.chatLoad);
+
 const chatFrame = page
   .frames()
   .find((f) => f.url().includes("webagent.mail.ru"));
 const chatInput = await chatFrame.waitForSelector(
   ".im-textfield_rich.im-chat__input-field"
 );
-await chatInput.type("Бракало ПИ-20в");
+await chatInput.type(config.chatMessage);
 await page.keyboard.press("Enter");
 
-await delay(30000);
+await delay(delays.beforeClose);
 await browser.close();

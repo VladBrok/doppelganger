@@ -1,0 +1,15 @@
+{
+  "targetUrl": "https://calls.mail.ru/room/2cd1ffff-a5a9-410c-a9cd-8851edf121ea",
+  "launchTimeout": 200000,
+  "headless": true,
+  "pageViewport": { "height": 700, "width": 1200, "deviceScaleFactor": 0.1 },
+  "chatMessage": "Бракало ПИ-20в",
+  "delays": {
+    "pageLoad": 10000,
+    "authFrameLoad": 10000,
+    "afterAuth": 60000,
+    "afterStart": 10000,
+    "chatLoad": 25000,
+    "beforeClose": 30000
+  }
+}
