@@ -1,8 +1,10 @@
 import puppeteer from "puppeteer";
 import dotenv from "dotenv";
+import { delay } from "./lib/delay";
 
 dotenv.config();
 const oksLectureUrl =
+  // "https://calls.mail.ru/room/0d9a6beb-2627-4a3f-a80b-432b1688d845";
   "https://calls.mail.ru/room/2cd1ffff-a5a9-410c-a9cd-8851edf121ea";
 // "https://calls.mail.ru/room/0d9a6beb-2627-4a3f-a80b-432b1688d845";
 
@@ -54,12 +56,14 @@ const startWithoutCamButton = await page.waitForSelector(
   ".base-0-2-100.base-d7-0-2-142"
 );
 await startWithoutCamButton.click();
+await delay(10000);
 
 const openChatButton = await page.waitForSelector(
-  ".base-0-2-144.base-d5-0-2-175"
+  ".base-0-2-563.base-d5-0-2-594"
+  // ".base-0-2-144.base-d5-0-2-175"
 );
 await openChatButton.click();
-await delay(15000);
+await delay(25000);
 const chatFrame = page
   .frames()
   .find((f) => f.url().includes("webagent.mail.ru"));
@@ -69,11 +73,5 @@ const chatInput = await chatFrame.waitForSelector(
 await chatInput.type("Бракало ПИ-20в");
 await page.keyboard.press("Enter");
 
-// await delay(30000);
-// await browser.close();
-
-async function delay(ms) {
-  return new Promise((resolve) => {
-    setTimeout(resolve, ms);
-  });
-}
+await delay(30000);
+await browser.close();
