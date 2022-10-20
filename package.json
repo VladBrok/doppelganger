@@ -5,6 +5,7 @@
   },
   "dependencies": {
     "dotenv": "^16.0.3",
+    "node-cron": "^3.0.2",
     "puppeteer": "^18.2.1"
   }
 }

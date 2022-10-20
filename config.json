@@ -1,5 +1,12 @@
 {
-  "targetUrl": "https://calls.mail.ru/room/2cd1ffff-a5a9-410c-a9cd-8851edf121ea",
+  "meetings": [
+    {
+      "url": "https://calls.mail.ru/room/2cd1ffff-a5a9-410c-a9cd-8851edf121ea",
+      "minute": 50,
+      "hour": 11,
+      "daysOfWeek": [5]
+    }
+  ],
   "launchTimeout": 200000,
   "headless": true,
   "pageViewport": { "height": 700, "width": 1200, "deviceScaleFactor": 0.1 },
