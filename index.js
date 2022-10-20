@@ -5,7 +5,6 @@ import { waitForAnySelector } from "./lib/waitForAnySelector.js";
 import config from "./config.json" assert { type: "json" };
 
 dotenv.config();
-
 const delays = config.delays;
 const browser = await launchBrowser(config);
 const page = await goToTargetPage({ browser, ...config });
@@ -82,12 +81,13 @@ async function enterMeeting({ page, delays }) {
 }
 
 async function openChat({ page, delays }) {
-  const openChatButton = await waitForAnySelector(
-    page,
-    ".base-0-2-144.base-d5-0-2-175",
-    ".base-0-2-563.base-d5-0-2-594"
-  );
-  await openChatButton.click();
+  await page.evaluate(async () => {
+    const buttons = [...document.querySelectorAll("button")];
+    const openChatButton = buttons.find(
+      (b) => b.textContent.toLowerCase() === "чат"
+    );
+    await openChatButton.click();
+  });
   await delay(delays.chatLoad);
 }
 
