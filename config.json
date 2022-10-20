@@ -6,8 +6,8 @@
   "chatMessage": "Бракало ПИ-20в",
   "delays": {
     "pageLoad": 10000,
-    "authFrameLoad": 10000,
-    "afterLogIn": 60000,
+    "authFrameLoad": 30000,
+    "afterLogIn": 80000,
     "afterStart": 10000,
     "chatLoad": 25000,
     "beforeClose": 30000
