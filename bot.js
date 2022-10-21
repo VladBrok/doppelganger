@@ -1,6 +1,7 @@
 import puppeteer from "puppeteer";
 import dotenv from "dotenv";
 import { delay } from "./lib/delay.js";
+import { sendEmail } from "./lib/email.js";
 import config from "./config.json" assert { type: "json" };
 
 dotenv.config();
@@ -23,7 +24,7 @@ do {
 } while (config.retry.count >= 0);
 
 if (errorReport.length) {
-  console.log(errorReport.join("\n"));
+  await sendEmail({ title: "mail.ru bot error", text: errorReport.join("\n") });
   process.exit(1);
 }
 
@@ -46,7 +47,7 @@ async function runBot({ config }) {
 }
 
 async function handleError({ err, report, config }) {
-  report.push(`[${new Date().toLocaleTimeString()}] ${err}`);
+  report.push(`[${config.targetUrl}]: ${err}`);
   config.retry.count--;
 
   if (config.retry.count >= 0) {
