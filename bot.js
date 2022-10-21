@@ -1,7 +1,6 @@
 import puppeteer from "puppeteer";
 import dotenv from "dotenv";
 import { delay } from "./lib/delay.js";
-import { waitForAnySelector } from "./lib/waitForAnySelector.js";
 import config from "./config.json" assert { type: "json" };
 
 dotenv.config();
