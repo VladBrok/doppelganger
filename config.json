@@ -18,5 +18,10 @@
     "afterStart": 10000,
     "chatLoad": 25000,
     "beforeClose": 30000
+  },
+  "retry": {
+    "pause": 30000,
+    "count": 1,
+    "delayMultiplier": 3
   }
 }

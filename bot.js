@@ -4,24 +4,59 @@ import { delay } from "./lib/delay.js";
 import config from "./config.json" assert { type: "json" };
 
 dotenv.config();
-console.log("start");
 
 config.targetUrl = process.argv[2];
 if (!config.targetUrl) {
-  throw new Error("Please provide a target url");
+  console.error("Please provide a target url");
+  process.exit(1);
 }
 
-const delays = config.delays;
-const browser = await launchBrowser(config);
-const page = await goToTargetPage({ browser, ...config });
+const errorReport = [];
 
-await logIn({ page, delays });
-await enterMeeting({ page, delays });
-await openChat({ page, delays });
-await writeMessage({ page, message: config.chatMessage });
-await closeBrowser({ browser, delays });
+do {
+  try {
+    await runBot({ config });
+    process.exit(0);
+  } catch (err) {
+    await handleError({ err, report: errorReport, config });
+  }
+} while (config.retry.count >= 0);
 
-console.log("finish");
+if (errorReport.length) {
+  console.log(errorReport.join("\n"));
+  process.exit(1);
+}
+
+async function runBot({ config }) {
+  let browser;
+
+  try {
+    const delays = config.delays;
+    browser = await launchBrowser(config);
+    const page = await goToTargetPage({ browser, ...config });
+
+    await logIn({ page, delays });
+    await enterMeeting({ page, delays });
+    await openChat({ page, delays });
+    await writeMessage({ page, message: config.chatMessage });
+    await exitMeeting({ browser, delays });
+  } finally {
+    browser?.close();
+  }
+}
+
+async function handleError({ err, report, config }) {
+  report.push(`[${new Date().toLocaleTimeString()}] ${err}`);
+  config.retry.count--;
+
+  if (config.retry.count >= 0) {
+    await delay(config.retry.pause);
+
+    for (const delay of Object.keys(config.delays)) {
+      config.delays[delay] *= config.retry.delayMultiplier;
+    }
+  }
+}
 
 async function launchBrowser({ targetUrl, headless, launchTimeout }) {
   const browser = await puppeteer.launch({
@@ -109,11 +144,7 @@ async function writeMessage({ page, message }) {
   await page.keyboard.press("Enter");
 }
 
-async function closeBrowser({ browser, delays }) {
+async function exitMeeting({ browser, delays }) {
   await delay(delays.beforeClose);
   await browser.close();
 }
-
-// "https://calls.mail.ru/room/0d9a6beb-2627-4a3f-a80b-432b1688d845"; // ?
-// "https://calls.mail.ru/room/2cd1ffff-a5a9-410c-a9cd-8851edf121ea"; // test
-// "https://calls.mail.ru/room/0d9a6beb-2627-4a3f-a80b-432b1688d845"; // oks
