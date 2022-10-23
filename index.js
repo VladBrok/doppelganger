@@ -7,15 +7,21 @@ for (const meeting of config.meetings) {
     ","
   )}`;
 
-  cron.schedule(time, () => {
-    const bot = spawn("node", ["bot.js", meeting.url]);
+  cron.schedule(
+    time,
+    () => {
+      const bot = spawn("node", ["bot.js", meeting.url]);
 
-    bot.stdout.on("data", (data) => {
-      console.log(`${meeting.url} stdout:`, data.toString());
-    });
+      bot.stdout.on("data", (data) => {
+        console.log(`${meeting.url} stdout:`, data.toString());
+      });
 
-    bot.stderr.on("data", (data) => {
-      console.log(`${meeting.url} stderr:`, data.toString());
-    });
-  });
+      bot.stderr.on("data", (data) => {
+        console.log(`${meeting.url} stderr:`, data.toString());
+      });
+    },
+    {
+      timezone: config.timezone,
+    }
+  );
 }

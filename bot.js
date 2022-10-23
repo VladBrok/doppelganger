@@ -78,6 +78,7 @@ async function launchBrowser({ targetUrl, headless, launchTimeout }) {
 
 async function goToTargetPage({ browser, targetUrl, pageViewport, delays }) {
   const page = await browser.newPage();
+  page.setDefaultNavigationTimeout(delays.navigation);
   await page.goto(targetUrl);
   await page.setViewport(pageViewport);
   await delay(delays.pageLoad);

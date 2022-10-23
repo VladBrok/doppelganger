@@ -2,9 +2,9 @@
   "meetings": [
     {
       "url": "https://calls.mail.ru/room/2cd1ffff-a5a9-410c-a9cd-8851edf121ea",
-      "minute": 50,
-      "hour": 11,
-      "daysOfWeek": [5]
+      "minute": 20,
+      "hour": 22,
+      "daysOfWeek": [0, 1]
     }
   ],
   "launchTimeout": 200000,
@@ -12,6 +12,7 @@
   "pageViewport": { "height": 700, "width": 1200, "deviceScaleFactor": 0.1 },
   "chatMessage": "Бракало ПИ-20в",
   "delays": {
+    "navigation": 60000,
     "pageLoad": 10000,
     "authFrameLoad": 30000,
     "afterLogIn": 80000,
@@ -23,5 +24,6 @@
     "pause": 30000,
     "count": 1,
     "delayMultiplier": 3
-  }
+  },
+  "timezone": "Europe/Moscow"
 }
