@@ -1,0 +1,13 @@
+{
+  "type": "module",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "dotenv": "^16.0.3",
+    "form-data": "^4.0.0",
+    "node-cron": "^3.0.2",
+    "node-fetch": "^3.2.10",
+    "puppeteer": "^18.2.1"
+  }
+}
