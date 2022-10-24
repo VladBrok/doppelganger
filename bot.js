@@ -142,6 +142,7 @@ async function writeMessage({ page, message }) {
   const chatInput = await chatFrame.waitForSelector(
     ".im-textfield_rich.im-chat__input-field"
   );
+  await chatInput.press("Backspace");
   await chatInput.type(message);
   await page.keyboard.press("Enter");
 }
