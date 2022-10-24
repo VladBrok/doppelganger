@@ -17,7 +17,7 @@
     "authFrameLoad": 30000,
     "afterLogIn": 80000,
     "afterStart": 10000,
-    "chatLoad": 25000,
+    "chatLoad": 35000,
     "beforeClose": 30000
   },
   "retry": {
